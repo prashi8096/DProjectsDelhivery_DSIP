@@ -1,331 +1,530 @@
-/* =========================================================
-   DSIP — Delhivery Shipment Intelligence Platform
-   app.js  |  jQuery $.ajax() only — no fetch()
-   ========================================================= */
+/* ============================================
+   DSIP - Delhivery Shipment Intelligence Platform
+   app.js
+============================================ */
 
 const API = "https://localhost:7113/api/Shipment";
 
-// Must match the C# ShipmentStatus enum names exactly
-const VALID_STATUSES = ["Booked", "InTransit", "OutForDelivery", "Delivered", "RTO"];
-
-// Human-readable labels for display
-const STATUS_LABELS = {
-    "Booked":          "Booked",
-    "InTransit":       "In Transit",
-    "OutForDelivery":  "Out for Delivery",
-    "Delivered":       "Delivered",
-    "RTO":             "RTO"
-};
-
-/* ── Loader & Toast helpers ──────────────────────────────── */
-
-let _loaderCount = 0;
-function showLoader() {
-    _loaderCount++;
-    $("#loader").addClass("active");
-}
-function hideLoader() {
-    _loaderCount = Math.max(0, _loaderCount - 1);
-    if (_loaderCount === 0) $("#loader").removeClass("active");
-}
-
-let _toastTimer = null;
-function showToast(msg, type /* "success" | "error" */) {
-    const $t = $("#toast");
-    $t.text(msg).removeClass("success error").addClass(type).addClass("show");
-    clearTimeout(_toastTimer);
-    _toastTimer = setTimeout(() => $t.removeClass("show success error"), 3200);
-}
-
-/* ── DOM Ready ───────────────────────────────────────────── */
-
 $(document).ready(function () {
+
     loadShipments();
     loadStats();
 
-    $("#btnBook").on("click", bookShipment);
-    $("#btnTrack").on("click", trackShipment);
-    $("#btnRefresh").on("click", function () { loadShipments(); loadStats(); });
-    $("#filterStatus").on("change", applyFilter);
+    $("#btnBook").click(bookShipment);
+    $("#btnTrack").click(trackShipment);
 
-    // Track on Enter key
-    $("#trackAwb").on("keydown", function (e) {
-        if (e.key === "Enter") trackShipment();
+    $("#btnRefresh").click(function () {
+        loadShipments();
+        loadStats();
     });
+
+    $("#filterStatus").change(filterShipments);
+
 });
 
-/* ── Load All Shipments ──────────────────────────────────── */
+
+function showLoader() {
+    $("#loader").addClass("active");
+}
+
+function hideLoader() {
+    $("#loader").removeClass("active");
+}
+
+function showMessage(message) {
+
+    $("#toast")
+        .text(message)
+        .addClass("show");
+
+    setTimeout(function () {
+        $("#toast").removeClass("show");
+    }, 2500);
+
+}
+
+
+/* ============================================
+        LOAD ALL SHIPMENTS
+============================================ */
 
 function loadShipments() {
+
     showLoader();
+
     $.ajax({
+
         url: API,
         type: "GET",
+
         success: function (shipments) {
-            renderTable(shipments);
+
             hideLoader();
+
+            $("#shipmentBody").empty();
+
+            if (shipments.length == 0) {
+
+                $("#shipmentBody").append(
+                    "<tr><td colspan='7'>No Shipments Found</td></tr>"
+                );
+
+                return;
+            }
+
+            $.each(shipments, function (index, shipment) {
+
+                var row = `
+
+<tr data-status="${shipment.status}">
+
+<td>${shipment.awbNumber}</td>
+
+<td>${shipment.senderName}</td>
+
+<td>${shipment.receiverName}</td>
+
+<td>${shipment.origin} → ${shipment.destination}</td>
+
+<td>${shipment.weightKg} Kg</td>
+
+<td>
+
+<select onchange="updateStatus('${shipment.awbNumber}',this.value)">
+
+<option value="Booked"
+${shipment.status=="Booked"?"selected":""}>
+Booked
+</option>
+
+<option value="InTransit"
+${shipment.status=="InTransit"?"selected":""}>
+In Transit
+</option>
+
+<option value="OutForDelivery"
+${shipment.status=="OutForDelivery"?"selected":""}>
+Out For Delivery
+</option>
+
+<option value="Delivered"
+${shipment.status=="Delivered"?"selected":""}>
+Delivered
+</option>
+
+<option value="RTO"
+${shipment.status=="RTO"?"selected":""}>
+RTO
+</option>
+
+</select>
+
+</td>
+
+<td>
+
+<button
+class="btn btn-danger"
+onclick="cancelShipment(${shipment.shipmentId})">
+
+Cancel
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+                $("#shipmentBody").append(row);
+
+            });
+
+            filterShipments();
+
         },
+
         error: function () {
+
             hideLoader();
-            showToast("Could not load shipments. Is the API running?", "error");
-            $("#shipmentBody").html(
-                '<tr class="empty-row"><td colspan="7">Failed to load shipments.</td></tr>'
-            );
+
+            alert("Unable to load shipments.");
+
         }
+
     });
+
 }
 
-/* ── Load Stats ──────────────────────────────────────────── */
+
+/* ============================================
+        LOAD STATS
+============================================ */
 
 function loadStats() {
-    showLoader();
+
     $.ajax({
+
         url: API + "/stats",
+
         type: "GET",
-        success: function (s) {
-            hideLoader();
-            $("#bookedCount").text(s.booked ?? 0);
-            $("#inTransitCount").text(s.inTransit ?? 0);
-            $("#outForDeliveryCount").text(s.outForDelivery ?? 0);
-            $("#deliveredCount").text(s.delivered ?? 0);
-            $("#rtoCount").text(s.rto ?? 0);
-        },
-        error: function () {
-            hideLoader();
-            // silently fail stats — main table failure is the primary signal
+
+        success: function (stats) {
+
+            $("#bookedCount").text(stats.booked);
+
+            $("#inTransitCount").text(stats.inTransit);
+
+            $("#outForDeliveryCount").text(stats.outForDelivery);
+
+            $("#deliveredCount").text(stats.delivered);
+
+            $("#rtoCount").text(stats.rto);
+
         }
+
     });
+
 }
 
-/* ── Render Table ────────────────────────────────────────── */
 
-function renderTable(shipments) {
-    const $body = $("#shipmentBody").empty();
+/* ============================================
+        VALIDATE BOOKING FORM
+        (returns true if valid, false if not)
+============================================ */
 
-    if (!shipments || shipments.length === 0) {
-        $body.html('<tr class="empty-row"><td colspan="7">No shipments found.</td></tr>');
-        return;
+function validateBookingForm(shipment) {
+
+    // AWB Number - required, only letters/numbers, min 5 chars
+    if (shipment.awbNumber == "") {
+        alert("AWB Number is required.");
+        return false;
     }
 
-    $.each(shipments, function (_, s) {
-        // s.status comes back as the enum name e.g. "InTransit"
-        const statusKey   = s.status || "Booked";
-        const statusLabel = STATUS_LABELS[statusKey] || statusKey;
-        const badgeClass  = "badge-" + statusKey;
+    var awbPattern = /^[A-Za-z0-9]{5,20}$/;
+    if (!awbPattern.test(shipment.awbNumber)) {
+        alert("AWB Number must be 5-20 letters/numbers only (no spaces or symbols).");
+        return false;
+    }
 
-        const $row = $(`
-            <tr data-status="${escHtml(statusKey)}" data-id="${s.shipmentId}">
-                <td><strong>${escHtml(s.awbNumber)}</strong></td>
-                <td>${escHtml(s.senderName)}</td>
-                <td>${escHtml(s.receiverName)}</td>
-                <td class="route-cell">
-                    ${escHtml(s.origin)}
-                    <span class="route-arrow">→</span>
-                    ${escHtml(s.destination)}
-                </td>
-                <td>${parseFloat(s.weightKg).toFixed(2)} kg</td>
-                <td><span class="badge ${badgeClass}">${escHtml(statusLabel)}</span></td>
-                <td></td>
-            </tr>
-        `);
+    // Sender Name - required, letters and spaces only
+    if (shipment.senderName == "") {
+        alert("Sender Name is required.");
+        return false;
+    }
 
-        // Inline status dropdown — values are enum names, labels are human-readable
-        const $select = $('<select class="status-select" aria-label="Update status"></select>');
-        VALID_STATUSES.forEach(function (st) {
-            const $opt = $("<option>").val(st).text(STATUS_LABELS[st] || st);
-            if (st === statusKey) $opt.prop("selected", true);
-            $select.append($opt);
-        });
-        $select.on("change", function () {
-            updateStatus(s.awbNumber, $(this).val(), $row);
-        });
+    var namePattern = /^[A-Za-z ]{2,50}$/;
+    if (!namePattern.test(shipment.senderName)) {
+        alert("Sender Name must contain only letters and spaces (2-50 characters).");
+        return false;
+    }
 
-        // Cancel button
-        const $cancel = $('<button class="btn btn-danger" title="Cancel shipment">Cancel</button>');
-        $cancel.on("click", function () {
-            cancelShipment(s.shipmentId, $row);
-        });
+    // Receiver Name - required, letters and spaces only
+    if (shipment.receiverName == "") {
+        alert("Receiver Name is required.");
+        return false;
+    }
 
-        const $actions = $('<div style="display:flex;gap:8px;align-items:center;"></div>')
-            .append($select)
-            .append($cancel);
-        $row.find("td:last-child").append($actions);
+    if (!namePattern.test(shipment.receiverName)) {
+        alert("Receiver Name must contain only letters and spaces (2-50 characters).");
+        return false;
+    }
 
-        $body.append($row);
-    });
+    // Origin - required
+    if (shipment.origin == "") {
+        alert("Origin is required.");
+        return false;
+    }
 
-    applyFilter();
+    // Destination - required
+    if (shipment.destination == "") {
+        alert("Destination is required.");
+        return false;
+    }
+
+    // Origin and Destination cannot be the same
+    if (shipment.origin.trim().toLowerCase() == shipment.destination.trim().toLowerCase()) {
+        alert("Origin and Destination cannot be the same.");
+        return false;
+    }
+
+    // Weight - required, must be a valid number within range
+    if (isNaN(shipment.weightKg) || shipment.weightKg <= 0) {
+        alert("Weight must be a number greater than 0.");
+        return false;
+    }
+
+    if (shipment.weightKg > 1000) {
+        alert("Weight cannot be more than 1000 Kg.");
+        return false;
+    }
+
+    // All checks passed
+    return true;
+
 }
 
-/* ── Client-side Filter ──────────────────────────────────── */
 
-function applyFilter() {
-    const val = $("#filterStatus").val();
-    $("#shipmentBody tr").each(function () {
-        if (!val || $(this).data("status") === val) {
-            $(this).show();
-        } else {
-            $(this).hide();
-        }
-    });
-}
-
-/* ── Book Shipment ───────────────────────────────────────── */
+/* ============================================
+        BOOK SHIPMENT
+============================================ */
 
 function bookShipment() {
-    const awb    = $.trim($("#awb").val());
-    const sender = $.trim($("#sender").val());
-    const recv   = $.trim($("#receiver").val());
-    const orig   = $.trim($("#origin").val());
-    const dest   = $.trim($("#destination").val());
-    const wt     = parseFloat($("#weight").val());
 
-    if (!awb || !sender || !recv || !orig || !dest || isNaN(wt) || wt <= 0) {
-        showToast("Please fill all fields. Weight must be greater than 0.", "error");
+    var shipment = {
+
+        awbNumber: $("#awb").val().trim(),
+
+        senderName: $("#sender").val().trim(),
+
+        receiverName: $("#receiver").val().trim(),
+
+        origin: $("#origin").val().trim(),
+
+        destination: $("#destination").val().trim(),
+
+        weightKg: parseFloat($("#weight").val())
+
+    };
+
+    // Run all validations before calling the API
+    if (!validateBookingForm(shipment)) {
         return;
     }
 
-    const payload = {
-        awbNumber:    awb,
-        senderName:   sender,
-        receiverName: recv,
-        origin:       orig,
-        destination:  dest,
-        weightKg:     wt
-    };
-
     showLoader();
+
     $.ajax({
+
         url: API,
+
         type: "POST",
+
         contentType: "application/json",
-        data: JSON.stringify(payload),
+
+        data: JSON.stringify(shipment),
+
         success: function () {
+
             hideLoader();
-            showToast("Shipment " + awb + " booked successfully.", "success");
-            $("#awb, #sender, #receiver, #origin, #destination, #weight").val("");
+
+            showMessage("Shipment Booked Successfully");
+
+            $("#awb").val("");
+            $("#sender").val("");
+            $("#receiver").val("");
+            $("#origin").val("");
+            $("#destination").val("");
+            $("#weight").val("");
+
             loadShipments();
+
             loadStats();
+
         },
+
         error: function (xhr) {
+
             hideLoader();
-            showToast(xhr.responseText || "Booking failed. Check inputs.", "error");
+
+            alert(xhr.responseText);
+
         }
+
     });
+
 }
 
-/* ── Update Status (inline) ──────────────────────────────── */
 
-function updateStatus(awb, newStatus, $row) {
+/* ============================================
+        UPDATE STATUS
+============================================ */
+
+function updateStatus(awb, status) {
+
     showLoader();
+
     $.ajax({
-        // Controller: [HttpPut("{awb}")] — no /status suffix
-        url: API + "/" + encodeURIComponent(awb),
+
+        url: API + "/" + awb,
+
         type: "PUT",
+
         contentType: "application/json",
-        // Controller: [FromBody] string status — must send a plain JSON string
-        data: JSON.stringify(newStatus),
+
+        data: JSON.stringify(status),
+
         success: function () {
+
             hideLoader();
-            const label = STATUS_LABELS[newStatus] || newStatus;
-            showToast("Status updated to \"" + label + "\".", "success");
-            // Update badge live without reloading the whole table
-            const badgeClass = "badge-" + newStatus;
-            $row.attr("data-status", newStatus);
-            $row.find(".badge")
-                .attr("class", "badge " + badgeClass)
-                .text(label);
-            loadStats();
-        },
-        error: function (xhr) {
-            hideLoader();
-            showToast(xhr.responseText || "Status update failed.", "error");
-            // Revert dropdown to current value
+
+            showMessage("Status Updated");
+
             loadShipments();
+
+            loadStats();
+
+        },
+
+        error: function (xhr) {
+
+            hideLoader();
+
+            alert(xhr.responseText);
+
+            loadShipments();
+
         }
+
     });
+
 }
 
-/* ── Cancel Shipment ─────────────────────────────────────── */
 
-function cancelShipment(shipmentId, $row) {
-    const awb = $row.find("td:first-child strong").text();
-    if (!confirm("Cancel shipment " + awb + "? This cannot be undone.")) return;
+/* ============================================
+        CANCEL SHIPMENT
+============================================ */
+
+function cancelShipment(id) {
+
+    if (!confirm("Are you sure?"))
+        return;
 
     showLoader();
+
     $.ajax({
-        url: API + "/" + shipmentId,
+
+        url: API + "/" + id,
+
         type: "DELETE",
+
         success: function () {
+
             hideLoader();
-            showToast("Shipment " + awb + " cancelled.", "success");
-            $row.fadeOut(300, function () { $(this).remove(); });
+
+            showMessage("Shipment Cancelled");
+
+            loadShipments();
+
             loadStats();
+
         },
+
         error: function (xhr) {
+
             hideLoader();
-            showToast(xhr.responseText || "Cancellation failed.", "error");
+
+            alert(xhr.responseText);
+
         }
+
     });
+
 }
 
-/* ── Track by AWB ────────────────────────────────────────── */
+
+/* ============================================
+        FILTER SHIPMENTS
+============================================ */
+
+function filterShipments() {
+
+    var status = $("#filterStatus").val();
+
+    $("#shipmentBody tr").each(function () {
+
+        if (
+            status == "" ||
+            $(this).attr("data-status") == status
+        ) {
+
+            $(this).show();
+
+        }
+        else {
+
+            $(this).hide();
+
+        }
+
+    });
+
+}
+
+
+/* ============================================
+        TRACK SHIPMENT
+============================================ */
 
 function trackShipment() {
-    const awb = $.trim($("#trackAwb").val());
-    if (!awb) { showToast("Enter an AWB number to track.", "error"); return; }
+
+    var awb = $("#trackAwb").val().trim();
+
+    // Validate AWB before calling the API
+    if (awb == "") {
+
+        alert("Enter AWB Number");
+
+        return;
+
+    }
+
+    var awbPattern = /^[A-Za-z0-9]{5,20}$/;
+    if (!awbPattern.test(awb)) {
+
+        alert("Enter a valid AWB Number (5-20 letters/numbers only).");
+
+        return;
+
+    }
 
     showLoader();
+
     $.ajax({
-        url: API + "/" + encodeURIComponent(awb),
+
+        url: API + "/" + awb,
+
         type: "GET",
-        success: function (s) {
+
+        success: function (shipment) {
+
             hideLoader();
-            const statusKey   = s.status || "Booked";
-            const statusLabel = STATUS_LABELS[statusKey] || statusKey;
-            const badgeClass  = "badge-" + statusKey;
+
             $("#trackResult")
-                .removeClass("hidden not-found")
+                .removeClass("hidden")
                 .html(`
-                    <div class="track-grid">
-                        <span class="tk-label">AWB</span>
-                        <span class="tk-value">${escHtml(s.awbNumber)}</span>
-                        <span class="tk-label">Sender</span>
-                        <span class="tk-value">${escHtml(s.senderName)}</span>
-                        <span class="tk-label">Receiver</span>
-                        <span class="tk-value">${escHtml(s.receiverName)}</span>
-                        <span class="tk-label">Route</span>
-                        <span class="tk-value">${escHtml(s.origin)} → ${escHtml(s.destination)}</span>
-                        <span class="tk-label">Weight</span>
-                        <span class="tk-value">${parseFloat(s.weightKg).toFixed(2)} kg</span>
-                        <span class="tk-label">Status</span>
-                        <span class="tk-value">
-                            <span class="badge ${badgeClass}">${escHtml(statusLabel)}</span>
-                        </span>
-                    </div>
-                `);
+
+<h3>Shipment Details</h3>
+
+<p><b>AWB :</b> ${shipment.awbNumber}</p>
+
+<p><b>Sender :</b> ${shipment.senderName}</p>
+
+<p><b>Receiver :</b> ${shipment.receiverName}</p>
+
+<p><b>Origin :</b> ${shipment.origin}</p>
+
+<p><b>Destination :</b> ${shipment.destination}</p>
+
+<p><b>Weight :</b> ${shipment.weightKg} Kg</p>
+
+<p><b>Status :</b> ${shipment.status}</p>
+
+`);
+
         },
-        error: function (xhr) {
+
+        error: function () {
+
             hideLoader();
-            if (xhr.status === 404) {
-                $("#trackResult")
-                    .removeClass("hidden")
-                    .addClass("not-found")
-                    .html("Shipment not found for AWB: <strong>" + escHtml(awb) + "</strong>");
-            } else {
-                showToast("Track request failed.", "error");
-            }
+
+            $("#trackResult")
+                .removeClass("hidden")
+                .html("<h3>Shipment Not Found</h3>");
+
         }
+
     });
-}
 
-/* ── Helpers ─────────────────────────────────────────────── */
-
-function escHtml(str) {
-    if (str == null) return "";
-    return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
 }
