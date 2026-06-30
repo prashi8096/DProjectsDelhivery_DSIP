@@ -1,0 +1,9 @@
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\bin\Debug\Delhivery.Data.dll
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\bin\Debug\Delhivery.Data.pdb
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\bin\Debug\Delhivery.Domain.dll
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\bin\Debug\Delhivery.Domain.pdb
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\obj\Debug\Delhivery.Data.csproj.AssemblyReference.cache
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\obj\Debug\Delhivery.Data.csproj.CoreCompileInputs.cache
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\obj\Debug\Delhiver.3B139F42.Up2Date
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\obj\Debug\Delhivery.Data.dll
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Data\obj\Debug\Delhivery.Data.pdb

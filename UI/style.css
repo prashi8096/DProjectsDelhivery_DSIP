@@ -1,0 +1,390 @@
+/* =========================================================
+   DSIP — Delhivery Shipment Intelligence Platform
+   style.css
+   ========================================================= */
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --red:        #E63946;
+    --red-dark:   #c0303b;
+    --navy:       #0D1B2A;
+    --navy-mid:   #1B2D42;
+    --navy-light: #243447;
+    --slate:      #8D99AE;
+    --off-white:  #EDF2F4;
+    --white:      #ffffff;
+
+    /* status colours */
+    --s-booked:    #4361EE;
+    --s-transit:   #F77F00;
+    --s-ofd:       #7B2FBE;
+    --s-delivered: #2DC653;
+    --s-rto:       #E63946;
+
+    --radius:   8px;
+    --shadow:   0 2px 12px rgba(0,0,0,0.18);
+    --transition: 0.18s ease;
+}
+
+html { font-size: 15px; }
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #f0f4f8;
+    color: var(--navy);
+    min-width: 900px;
+}
+
+/* ---------- Loader ---------- */
+.loader {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+.loader.active { opacity: 1; }
+.loader-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--red);
+    animation: none;
+}
+.loader.active .loader-bar {
+    animation: loading 1.4s ease infinite;
+}
+@keyframes loading {
+    0%   { width: 0%;   margin-left: 0; }
+    50%  { width: 60%;  margin-left: 20%; }
+    100% { width: 0%;   margin-left: 100%; }
+}
+
+/* ---------- Toast ---------- */
+.toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    min-width: 240px;
+    max-width: 380px;
+    padding: 14px 20px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--white);
+    background: var(--navy-mid);
+    box-shadow: var(--shadow);
+    z-index: 9998;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none;
+}
+.toast.show   { opacity: 1;  transform: translateY(0); }
+.toast.success { background: #1a7f4a; }
+.toast.error   { background: var(--red-dark); }
+
+/* ---------- Header ---------- */
+.header {
+    background: var(--navy);
+    color: var(--white);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+.header-inner {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 28px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.wordmark {
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+}
+.wordmark-d { color: var(--red); }
+.header-title {
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--slate);
+    flex: 1;
+}
+.btn-icon {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    display: flex; align-items: center; justify-content: center;
+}
+.btn-icon:hover { background: rgba(255,255,255,0.1); transform: rotate(90deg); }
+
+/* ---------- Main ---------- */
+.main {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 24px 28px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ---------- Stats Bar ---------- */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+}
+.stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: var(--shadow);
+    border-top: 3px solid transparent;
+    transition: transform var(--transition);
+}
+.stat-card:hover { transform: translateY(-2px); }
+#stat-Booked       { border-top-color: var(--s-booked); }
+#stat-InTransit    { border-top-color: var(--s-transit); }
+#stat-OutForDelivery { border-top-color: var(--s-ofd); }
+#stat-Delivered    { border-top-color: var(--s-delivered); }
+#stat-RTO          { border-top-color: var(--s-rto); }
+
+.stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--slate);
+    font-weight: 600;
+}
+.stat-count {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+}
+
+/* ---------- Panels ---------- */
+.panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.panel {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+.panel-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--slate);
+    font-weight: 700;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e8edf2;
+}
+.panel-table { padding: 24px; }
+
+/* ---------- Form ---------- */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--slate);
+}
+input[type="text"],
+input[type="number"],
+select {
+    border: 1.5px solid #d1d8e0;
+    border-radius: 6px;
+    padding: 9px 12px;
+    font-size: 0.9rem;
+    color: var(--navy);
+    background: var(--white);
+    transition: border-color var(--transition), box-shadow var(--transition);
+    width: 100%;
+}
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.12);
+}
+input::placeholder { color: #aab4be; }
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary {
+    background: var(--red);
+    color: var(--white);
+}
+.btn-primary:hover { background: var(--red-dark); }
+.btn-danger {
+    background: transparent;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 5px 12px;
+    font-size: 0.8rem;
+}
+.btn-danger:hover { background: var(--red); color: var(--white); }
+
+/* ---------- Track Section ---------- */
+.track-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.track-row input { flex: 1; }
+.track-result {
+    background: #f7f9fc;
+    border: 1.5px solid #e0e7f0;
+    border-radius: var(--radius);
+    padding: 18px;
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+.track-result.hidden { display: none; }
+.track-result .track-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 20px;
+}
+.track-result .tk-label { color: var(--slate); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; }
+.track-result .tk-value { color: var(--navy); font-weight: 500; }
+.track-result.not-found { color: var(--red); font-weight: 600; text-align: center; padding: 24px; }
+
+/* ---------- Table Controls ---------- */
+.table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+}
+.table-controls { display: flex; align-items: center; gap: 12px; }
+.filter-select {
+    width: auto;
+    min-width: 160px;
+    font-size: 0.82rem;
+    padding: 7px 10px;
+}
+
+/* ---------- Table ---------- */
+.table-wrap {
+    overflow-x: auto;
+    margin-top: 16px;
+}
+#shipmentTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+#shipmentTable thead tr {
+    background: var(--navy);
+    color: var(--white);
+}
+#shipmentTable th {
+    padding: 12px 14px;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+}
+#shipmentTable td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #edf0f5;
+    vertical-align: middle;
+}
+#shipmentTable tbody tr:hover { background: #f5f8ff; }
+#shipmentTable tbody tr:last-child td { border-bottom: none; }
+
+.empty-row td {
+    text-align: center;
+    color: var(--slate);
+    padding: 40px !important;
+    font-style: italic;
+}
+
+/* ---------- Status Badges ---------- */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+.badge-Booked         { background: #dde8ff; color: #2a44c7; }
+.badge-InTransit      { background: #fff0d6; color: #b85c00; }
+.badge-OutForDelivery { background: #f0e2ff; color: #5c1f99; }
+.badge-Delivered      { background: #d4f5e2; color: #1a7f4a; }
+.badge-RTO            { background: #ffe0e2; color: #b0262f; }
+
+/* ---------- Inline Status Select ---------- */
+.status-select {
+    border: 1.5px solid #d1d8e0;
+    border-radius: 6px;
+    padding: 5px 8px;
+    font-size: 0.8rem;
+    background: var(--white);
+    color: var(--navy);
+    cursor: pointer;
+    width: 100%;
+    max-width: 170px;
+}
+.status-select:focus {
+    outline: none;
+    border-color: var(--red);
+}
+
+/* ---------- Route Cell ---------- */
+.route-cell { color: var(--slate); white-space: nowrap; }
+.route-arrow { margin: 0 5px; color: var(--red); font-weight: 700; }
+
+/* ---------- Utility ---------- */
+.sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); border: 0;
+}

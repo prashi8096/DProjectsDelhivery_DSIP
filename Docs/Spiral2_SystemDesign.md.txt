@@ -1,0 +1,243 @@
+# Spiral 2 — System Design
+
+## Step 1: Select the Architecture
+
+We use **Layered Architecture**.
+
+Presentation Layer
+
+│
+
+├── Console
+
+├── API
+
+└── UI
+
+│
+
+Business Layer
+
+│
+
+└── Services
+
+│
+
+Data Access Layer
+
+│
+
+└── Repository + DB Helper
+
+│
+
+Database
+
+│
+
+└── SQL Server
+
+### Why?
+
+- Separation of concerns
+- Easy maintenance
+- Easy testing
+- Reusable code
+
+---
+
+## Step 2: Solution Structure
+
+Delhivery_DSIP
+
+│
+
+├── Delhivery.Console
+
+├── Delhivery.Domain
+
+├── Delhivery.Data
+
+├── Delhivery.API
+
+│
+
+├── Database
+
+├── UI
+
+├── Python
+
+├── GenAI
+
+├── Docs
+
+└── README.md
+
+This matches the assessment while adding a reusable `Domain` project for shared models.
+
+---
+
+## Step 3: Project Responsibilities
+
+### Delhivery.Console
+
+Responsible for:
+- Console Menu
+- User Interaction
+- Calling Service Layer
+
+### Delhivery.Domain
+
+Contains:
+- Entities
+- Enums
+- DTOs
+- Custom Exceptions
+
+### Delhivery.Data
+
+Contains:
+- Repository
+- DB Helper
+- SQL Commands
+- Stored Procedure Calls
+
+### Delhivery.API
+
+Contains:
+- Controllers
+- Dependency Injection
+- Validation
+- Swagger
+- API Endpoints
+
+### Database
+
+Contains:
+- Table Scripts
+- Stored Procedures
+- Views
+- Indexes
+- Seed Data
+
+### UI
+
+Contains:
+- index.html
+- style.css
+- app.js
+
+### Python
+
+Contains:
+- report.py
+
+### GenAI
+
+Contains:
+- COPILOT_LOG.md
+- PROMPT_LOG.md
+- REFLECTION.md
+
+---
+
+## Step 4: Module Dependency Diagram
+
+            UI
+             │
+             ▼
+         Web API
+             │
+             ▼
+        Repository
+             │
+             ▼
+         SQL Server
+
+
+
+
+Console
+
+│
+
+▼
+
+Repository
+
+│
+
+▼
+
+SQL Server
+
+
+
+
+
+Python
+
+│
+
+▼
+
+Web API
+
+---
+
+## Step 5: Design Principles
+
+We follow:
+- SOLID Principles
+- DRY (Don't Repeat Yourself)
+- KISS (Keep It Simple)
+- Repository Pattern
+- Dependency Injection
+- Layered Architecture
+- Parameterized Queries
+- Exception Handling
+- Input Validation
+
+---
+
+## Step 6: Coding Standards
+
+### Naming
+
+Classes:
+ShipmentRepository
+
+ShipmentService
+
+ShipmentController
+
+DbHelper
+
+Variables:
+shipment
+
+shipmentList
+
+awbNumber
+
+status
+
+Methods:
+BookShipment()
+
+GetShipment()
+
+UpdateStatus()
+
+DeleteShipment()
+
+---
+
+## Step 7: Error Handling Strategy
+
+- Custom exceptions will be used where appropriate (e.g. ShipmentNotFoundException).
+- API returns meaningful HTTP status codes (400, 404, 500).
+- SQL exceptions are handled gracefully with try-catch blocks.
+- Input is validated before database operations.

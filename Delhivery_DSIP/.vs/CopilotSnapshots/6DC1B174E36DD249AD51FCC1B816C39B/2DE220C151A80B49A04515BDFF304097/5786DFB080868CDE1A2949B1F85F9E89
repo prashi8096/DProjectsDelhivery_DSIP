@@ -1,0 +1,62 @@
+﻿using Delhivery.Console.Services;
+using System;
+namespace Delhivery.ConsoleApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            ShipmentService shipmentService = new ShipmentService();
+
+            bool exit = false;
+
+            while (!exit)
+            {
+                Console.Clear();
+
+                Console.WriteLine("========================================");
+                Console.WriteLine(" DELHIVERY SHIPMENT MANAGEMENT SYSTEM");
+                Console.WriteLine("========================================");
+                Console.WriteLine("1. Book Shipment");
+                Console.WriteLine("2. List Shipments");
+                Console.WriteLine("3. Update Shipment Status");
+                Console.WriteLine("4. Cancel Shipment");
+                Console.WriteLine("0. Exit");
+                Console.WriteLine("========================================");
+
+                Console.Write("Enter your choice : ");
+
+                string choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+
+                        break;
+
+                    case "2":
+
+                        break;
+
+                    case "3":
+
+                        break;
+
+                    case "4":
+
+                        break;
+
+                    case "0":
+
+                        exit = true;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid Choice.");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Delhivery.API/Delhivery.API.csproj" />
+  <Project Path="Delhivery.Console/Delhivery.Console.csproj" Id="9097913d-a50f-43e6-9d34-db8e19898b05" />
+  <Project Path="Delhivery.Data/Delhivery.Data.csproj" Id="b2c55d30-df9d-435c-acea-a71feb4129e9" />
+  <Project Path="Delhivery.Domain/Delhivery.Domain.csproj" Id="ac233477-0cf4-4341-ac9d-daab7766115b" />
+</Solution>

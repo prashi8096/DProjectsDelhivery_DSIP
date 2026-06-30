@@ -1,0 +1,12 @@
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\bin\Debug\Delhivery.Console.exe.config
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\bin\Debug\Delhivery.Console.exe
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\bin\Debug\Delhivery.Console.pdb
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\bin\Debug\Delhivery.Data.dll
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\bin\Debug\Delhivery.Domain.dll
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\bin\Debug\Delhivery.Data.pdb
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\bin\Debug\Delhivery.Domain.pdb
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\obj\Debug\Delhivery.Console.csproj.AssemblyReference.cache
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\obj\Debug\Delhivery.Console.csproj.CoreCompileInputs.cache
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\obj\Debug\Delhiver.C054BFEC.Up2Date
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\obj\Debug\Delhivery.Console.exe
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Console\obj\Debug\Delhivery.Console.pdb

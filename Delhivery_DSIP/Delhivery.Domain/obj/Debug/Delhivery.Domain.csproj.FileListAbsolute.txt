@@ -1,0 +1,6 @@
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Domain\bin\Debug\Delhivery.Domain.dll
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Domain\bin\Debug\Delhivery.Domain.pdb
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Domain\obj\Debug\Delhivery.Domain.csproj.AssemblyReference.cache
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Domain\obj\Debug\Delhivery.Domain.csproj.CoreCompileInputs.cache
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Domain\obj\Debug\Delhivery.Domain.dll
+C:\Users\prashanth.eeru\OneDrive - Acuvate Software Private Limited\Acuvate_Training\DProjectsDelhivery_DSIP\Delhivery_DSIP\Delhivery.Domain\obj\Debug\Delhivery.Domain.pdb

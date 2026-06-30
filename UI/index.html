@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSIP – Delhivery Shipment Intelligence Platform</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+<body>
+
+    <!-- HEADER BAR -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="wordmark">
+                <span class="wordmark-d">D</span>elhivery
+            </div>
+            <div class="header-title">Shipment Intelligence Platform</div>
+            <div class="header-actions">
+                <button class="btn-icon" id="btnRefresh" title="Refresh data">&#8635;</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="toast" aria-live="polite"></div>
+
+    <!-- LOADING INDICATOR -->
+    <div id="loader" class="loader" aria-label="Loading">
+        <div class="loader-bar"></div>
+    </div>
+
+    <main class="main">
+
+        <!-- STATS BAR -->
+        <section class="stats-bar" aria-label="Shipment statistics">
+            <div class="stat-card" id="stat-Booked">
+                <span class="stat-label">Booked</span>
+                <span class="stat-count" id="bookedCount">–</span>
+            </div>
+            <div class="stat-card" id="stat-InTransit">
+                <span class="stat-label">In Transit</span>
+                <span class="stat-count" id="inTransitCount">–</span>
+            </div>
+            <div class="stat-card" id="stat-OutForDelivery">
+                <span class="stat-label">Out for Delivery</span>
+                <span class="stat-count" id="outForDeliveryCount">–</span>
+            </div>
+            <div class="stat-card" id="stat-Delivered">
+                <span class="stat-label">Delivered</span>
+                <span class="stat-count" id="deliveredCount">–</span>
+            </div>
+            <div class="stat-card" id="stat-RTO">
+                <span class="stat-label">RTO</span>
+                <span class="stat-count" id="rtoCount">–</span>
+            </div>
+        </section>
+
+        <!-- TWO-COLUMN LAYOUT: Book + Track -->
+        <div class="panels">
+
+            <!-- BOOK SHIPMENT -->
+            <section class="panel" id="panel-book">
+                <h2 class="panel-title">Book Shipment</h2>
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="awb">AWB Number</label>
+                        <input type="text" id="awb" placeholder="e.g. DEL2025001" autocomplete="off">
+                    </div>
+                    <div class="field">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" placeholder="e.g. 2.5" min="0.01" step="0.01">
+                    </div>
+                    <div class="field">
+                        <label for="sender">Sender Name</label>
+                        <input type="text" id="sender" placeholder="Full name">
+                    </div>
+                    <div class="field">
+                        <label for="receiver">Receiver Name</label>
+                        <input type="text" id="receiver" placeholder="Full name">
+                    </div>
+                    <div class="field">
+                        <label for="origin">Origin</label>
+                        <input type="text" id="origin" placeholder="City or pincode">
+                    </div>
+                    <div class="field">
+                        <label for="destination">Destination</label>
+                        <input type="text" id="destination" placeholder="City or pincode">
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="btnBook">Book Shipment</button>
+            </section>
+
+            <!-- TRACK BY AWB -->
+            <section class="panel" id="panel-track">
+                <h2 class="panel-title">Track by AWB</h2>
+                <div class="track-row">
+                    <input type="text" id="trackAwb" placeholder="Enter AWB Number" autocomplete="off">
+                    <button class="btn btn-primary" id="btnTrack">Track</button>
+                </div>
+                <div id="trackResult" class="track-result hidden"></div>
+            </section>
+
+        </div>
+
+        <!-- SHIPMENTS TABLE -->
+        <section class="panel panel-table" id="panel-shipments">
+            <div class="table-header">
+                <h2 class="panel-title">All Shipments</h2>
+                <div class="table-controls">
+                    <label for="filterStatus" class="sr-only">Filter by status</label>
+                    <select id="filterStatus" class="filter-select">
+                        <option value="">All Statuses</option>
+                        <option value="Booked">Booked</option>
+                        <option value="InTransit">In Transit</option>
+                        <option value="OutForDelivery">Out for Delivery</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="RTO">RTO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table id="shipmentTable">
+                    <thead>
+                        <tr>
+                            <th>AWB</th>
+                            <th>Sender</th>
+                            <th>Receiver</th>
+                            <th>Route</th>
+                            <th>Weight</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shipmentBody">
+                        <tr class="empty-row">
+                            <td colspan="7">Loading shipments…</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

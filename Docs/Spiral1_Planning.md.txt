@@ -1,0 +1,96 @@
+# Spiral 1 — Planning Document
+
+## 1. Project Information
+
+| Field | Details |
+|-------|---------|
+| **Project Name** | Delhivery Shipment Intelligence Platform (DSIP) |
+| **Client** | Delhivery Engineering, Gurugram |
+| **Development Model** | Spiral Model |
+| **Duration** | 3 Days |
+| **Technology Stack** | C#, SQL Server, ADO.NET, ASP.NET Core Web API, HTML/CSS/JS/jQuery, Python, Gen AI |
+
+---
+
+## 2. Problem Statement
+
+Delhivery's operations teams currently lack a unified internal tool to book, track, and analyse shipments across India. Without a centralized platform, shipment data is scattered, status updates are manual and error-prone, and daily analytics require time-consuming manual effort. The Delhivery Shipment Intelligence Platform (DSIP) aims to solve this by providing a single end-to-end system covering shipment booking, real-time tracking, status management, and automated end-of-day reporting.
+
+---
+
+## 3. Project Objectives
+
+1. Book new shipments with validated data (AWB, sender, receiver, origin, destination, weight)
+2. Track shipments by AWB number in real time
+3. Update shipment status through a defined lifecycle (Booked → In Transit → Out for Delivery → Delivered / RTO)
+4. Cancel shipments when required
+5. Provide a dashboard with live statistics (counts per status)
+6. Filter and view shipments by status
+7. Generate automated end-of-day analytics reports with CSV export
+8. Demonstrate responsible use of AI tools with proper logging and reflection
+
+---
+
+## 4. Project Scope
+
+### In Scope
+
+- C# Console Application (in-memory shipment prototype)
+- SQL Server Database (schema, stored procedures, views, indexes, seed data)
+- ADO.NET Data Access Layer (parameterized queries, no ORM)
+- ASP.NET Core Web API (6 RESTful endpoints with validation)
+- Browser-based UI Dashboard (HTML/CSS/JS/jQuery, single page, AJAX-driven)
+- Python Analytics Script (end-of-day report with CSV export)
+- Gen AI Documentation (Copilot log, prompt engineering, reflection)
+
+### Out of Scope
+
+- User authentication / login system
+- Payment gateway integration
+- Real-time GPS tracking
+- Mobile application
+- Email / SMS notifications
+- Multi-tenant architecture
+- Production deployment / CI-CD pipeline
+
+---
+
+## 5. Stakeholders
+
+| Stakeholder | Role |
+|-------------|------|
+| Operations Staff | Primary users: book, track, and update shipments via the dashboard |
+| Operations Manager | Reviews end-of-day reports, monitors overall shipment health |
+| Data Analyst | Consumes Python analytics output and CSV exports |
+| Graduate Developer (Prashanth) | Designs, builds, and delivers the full platform |
+| Assessor | Evaluates code quality, understanding, and project completeness |
+
+---
+
+## 6. High-Level Modules
+
+| # | Module | Day | Description |
+|---|--------|-----|-------------|
+| 1 | Console Application | Day 1 | C# console prototype simulating shipment CRUD in memory |
+| 2 | Database | Day 1 | SQL Server schema, stored procedures, view, index, seed data |
+| 3 | Data Access Layer | Day 1 | ADO.NET repository with parameterized queries and proper disposal |
+| 4 | Web API | Day 2 | ASP.NET Core REST service exposing 6 endpoints with DI and validation |
+| 5 | UI Dashboard | Day 2 | Single-page HTML/CSS/JS/jQuery dashboard with AJAX and client-side filtering |
+| 6 | Python Analytics | Day 3 | End-of-day report script with CLI export and error handling |
+| 7 | Gen AI & Copilot | Day 3 | Usage log, prompt engineering iteration, and reflection document |
+
+---
+
+## 7. Spiral Iterations Plan
+
+| Spiral | Focus | Deliverable |
+|--------|-------|-------------|
+| Spiral 1 | Planning & Risk Analysis | This document, environment setup |
+| Spiral 2 | Backend Foundations | Console app + SQL database + ADO.NET layer |
+| Spiral 3 | API & Integration | Web API with all endpoints tested via Swagger |
+| Spiral 4 | Frontend & UX | Fully functional dashboard connected to API |
+| Spiral 5 | Intelligence & Delivery | Python report, GenAI docs, README, final ZIP |
+
+---
+
+*Document prepared as part of Spiral 1 — Planning Phase*

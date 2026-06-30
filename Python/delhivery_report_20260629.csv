@@ -1,0 +1,9 @@
+ShipmentId,AWB,Sender,Receiver,Origin,Destination,WeightKg,Status,BookedAt,DeliveredAt
+12,AWB1002,prashi,shiva,hyde,bang,10,Delivered,2026-06-29T10:19:51.2,2026-06-29T10:24:49.04
+9,AWB1001,Prashanth,Shiva,Hyderabad,Chennai,12,Delivered,2026-06-29T10:16:55.13,2026-06-29T10:20:27.29
+3,DEL2025003,John Peter,David Raj,Chennai,Pune,3.4,InTransit,2026-06-26T18:03:47.41,2026-06-29T17:26:17.09
+4,DEL2025004,Anil Kumar,Ravi Teja,Hyderabad,Chennai,6.1,Delivered,2026-06-26T18:03:47.41,2026-06-26T18:03:47.41
+5,DEL2025005,Sneha Rao,Kiran Das,Mumbai,Kolkata,1.8,Delivered,2026-06-26T18:03:47.41,2026-06-26T18:03:47.41
+6,DEL2025006,Deepak Jain,Neha Gupta,Jaipur,Delhi,4.7,RTO,2026-06-26T18:03:47.41,
+7,DEL2025007,Meena Patel,Arjun Shah,Ahmedabad,Surat,2.9,Booked,2026-06-26T18:03:47.41,
+8,DEL2025008,Vijay Kumar,Lakshmi Devi,Vizag,Hyderabad,8.5,InTransit,2026-06-26T18:03:47.41,
